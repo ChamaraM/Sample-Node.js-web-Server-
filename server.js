@@ -3,6 +3,7 @@ var app         =   express();
 var bodyParser  =   require("body-parser");
 var router      =   express.Router();
 var mongoOp     =   require("./model/mongo");
+var mongoOp2    =   require("./model/sutdents");
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({"extended" : false}));
@@ -10,6 +11,54 @@ app.use(bodyParser.urlencoded({"extended" : false}));
 router.get("/",function(req,res){
     res.json({"error" : false,"message" : "Hello World"});
 });
+
+router.route("/student")
+    .get(function(req,res){
+        var response = {};
+        mongoOp2.find({},function(err,data){
+        // Mongo command to fetch all data from collection.
+            if(err) {
+                response = {"error" : true,"message" : "Error fetching data"};
+               
+
+            } else {
+                response = data;
+                 console.log("Password match");
+                /* if(data.userEmail .equal("cc@faf.com") ) {
+                    // case where email needs to be updated.
+                     Console.log("Password match");
+                }*/
+            }
+            
+            res.json(response);
+        });
+    })
+      .post(function(req,res){
+        var db = new mongoOp2();
+        var response = {};
+        // fetch email and password from REST request.
+        // Add strict validation when you use this in Production.
+        db.StudentName = req.body.StudentName; 
+        db.RegNumber = req.body.RegNumber;
+        db.Sex = req.body.Sex;
+        db.year = req.body.year;
+        db.faculty = req.body.faculty;
+        db.semester = req.body.semester;
+
+        db.save(function(err){
+        // save() will run insert() command of MongoDB.
+        // it will add new data in collection.
+            if(err) {
+                response = {"error" : true,"message" : "Error adding data"};
+                res.status(400).json(response);
+            } else {
+                response = {"error" : false, "message" : "Data added"};
+                res.json(response);
+            }
+            
+        });
+    });
+
 
 router.route("/users")
     .get(function(req,res){
@@ -21,8 +70,8 @@ router.route("/users")
                
 
             } else {
-                response = {"error" : false,"message" : data};
-                 
+                response = data;
+                 console.log("Password match");
                 /* if(data.userEmail .equal("cc@faf.com") ) {
                     // case where email needs to be updated.
                      Console.log("Password match");
