@@ -24,10 +24,7 @@ router.route("/student")
             } else {
                 response = data;
                  console.log("Password match");
-                /* if(data.userEmail .equal("cc@faf.com") ) {
-                    // case where email needs to be updated.
-                     Console.log("Password match");
-                }*/
+              
             }
             
             res.json(response);
